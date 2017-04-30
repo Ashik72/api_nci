@@ -3,7 +3,7 @@
 require_once 'class.db.php';
 
 use \JsonCollectionParser\Parser as Parser;
-
+use Unirest\Request as Request;
 /**
  * ImportHotels
  */
@@ -65,46 +65,82 @@ class ImportHotels
   public static function processData($type = "") {
 
     if (strcmp($type, "file") === 0)
-      self::processFile($_GET['file']);
+      static::processFile($_GET['file']);
     elseif (strcmp($type, "link") === 0)
-      self::processLink($_GET['link']);
+      static::processLink($_GET['link']);
 
   }
 
-  private static function processFile($file = "") {
+
+
+  protected static function processFile($file = "") {
 
     $file = dirname(__DIR__).DIRECTORY_SEPARATOR."file".DIRECTORY_SEPARATOR.$file;
 
     if (!file_exists($file))
       return;
 
-    //$data = file_get_contents($file);
-
-
-    // if (!self::isJSON($data))
-    //   return;
-
-    $parser = new Parser();
-
-    $parser->parse($file, [get_class(), 'importToDB']);
+    static::parserProcess($file);
 
     return;
 
-    // $data = json_decode($data);
-    //
-    // self::importToDB($data);
-
   }
 
-  public static function process(array $item) {
-    //is_array($item); //true
+  public static function process($item) {
     d($item);
 }
 
+  protected static function parserProcess($file = "") {
 
-  private static function processLink($link = "") {
+    if (empty($file))
+      return;
 
-    d($link);
+      $parser = new Parser();
+
+      $parser->parse($file, [get_called_class(), 'importToDB']);
+      //$parser->parse($file, [get_class(), 'process']);
+
+      return;
+
+  }
+
+
+
+
+  protected static function processLink($link = "") {
+
+    $headers = array('Accept' => 'application/json');
+
+    $query = array();
+
+    $link_query = $_GET;
+    $link_query = array_slice($link_query, 2);
+    $query = $link_query;
+
+    try {
+      $response = Request::post($link, $headers, $query);
+    } catch (Exception $e) {
+      return;
+    }
+
+    if ($response->code !== 200)
+      return;
+
+    $response = $response->body;
+
+    $tmpfname = tempnam("/tmp", "hotels");
+
+    $handle = fopen($tmpfname, "w");
+    fwrite($handle, $response);
+    fclose($handle);
+    if (!file_exists($tmpfname))
+      return;
+
+    static::parserProcess($tmpfname);
+    unlink($tmpfname);
+
+
+    return;
 
   }
 
@@ -118,12 +154,9 @@ class ImportHotels
       $temp_data = (object) $json;
 
       $temp_data->code = (int) $temp_data->code;
-
-      if (self::keyExists($temp_data->code))
-        $temp_data->code = ( (int) self::getLastIndex() ) + 1;
+      if (static::keyExists($temp_data->code))
+        $temp_data->code = ( (int) static::getLastIndex() ) + 1;
         $db = DB::Connect();
-
-
         $code = $db->real_escape_string($temp_data->code);
         $master = $db->real_escape_string($temp_data->master);
         $name = $db->real_escape_string($temp_data->name);
@@ -145,7 +178,7 @@ class ImportHotels
         $hotel_amenity = $db->real_escape_string($temp_data->descriptions['hotel_amenity']);
         $room_amenity = $db->real_escape_string($temp_data->descriptions['room_amenity']);
         $location_information = $db->real_escape_string($temp_data->descriptions['location_information']);
-        $hotel_introduction = ( empty($temp_data->descriptions['hotel_introduction'] ? "none" : $db->real_escape_string($temp_data->descriptions['hotel_introduction']) ));
+        $hotel_introduction = ( empty($temp_data->descriptions['hotel_introduction']) ? "none" : $db->real_escape_string($temp_data->descriptions['hotel_introduction']) );
 
         $hotel_availability_score = ( empty($temp_data->availability_score) ? 0 : $db->real_escape_string($temp_data->availability_score) );
 
@@ -164,13 +197,25 @@ class ImportHotels
       	$hotel_introduction = str_replace("'","&apos;",$hotel_introduction);
       	$attraction_information = str_replace("'","&apos;",$attraction_information);
 
-        $sql = "INSERT INTO hotels VALUES('$code', '$master', '$destination', '$zipcode', '$latitude', '$longitude', '$countrycode', '$hotel_type', '$stars', '$hotel_availability_score', '$nr_rooms', '$nr_restaurants', '$nr_bars', '$nr_halls', '$year_built','$checkin_from','$checkout_to','','$updated_at')";
+        $sql = "INSERT INTO hotels VALUES('$code', '$master', '$name', '$country', '$destination', '$zipcode', '$address', '$latitude', '$longitude', '$countrycode', '$hotel_type', '$stars', '$hotel_availability_score', '$nr_rooms', '$nr_restaurants', '$nr_bars', '$nr_halls', '$year_built', '$checkin_from','$checkout_to','','$hotel_information', '$hotel_introduction', '$location_information', '$attraction_information', '$hotel_amenity', '$room_amenity','$updated_at')";
+
         $result = $db->query($sql);
         $db->close();
-        d($result);
-        return;
 
+        $passed = 0;
+        $failed = 0;
 
+        if ($result == 1)
+          $passed++;
+        else
+          $failed++;
+
+        d([
+          'sql' => $sql,
+          'result' => $result
+        ]);
+
+        return ['passed' => $passed, 'failed' => $failed];
  }
 
 

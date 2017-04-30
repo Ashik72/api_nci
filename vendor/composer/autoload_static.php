@@ -39,6 +39,16 @@ class ComposerStaticInitb334676db889a370ee948b060f56f71b
         ),
     );
 
+    public static $prefixesPsr0 = array (
+        'U' => 
+        array (
+            'Unirest\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/mashape/unirest-php/src',
+            ),
+        ),
+    );
+
     public static $classMap = array (
         'Kint' => __DIR__ . '/..' . '/kint-php/kint/src/Kint.php',
         'Kint_Object' => __DIR__ . '/..' . '/kint-php/kint/src/Object.php',
@@ -120,6 +130,7 @@ class ComposerStaticInitb334676db889a370ee948b060f56f71b
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitb334676db889a370ee948b060f56f71b::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitb334676db889a370ee948b060f56f71b::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitb334676db889a370ee948b060f56f71b::$prefixesPsr0;
             $loader->classMap = ComposerStaticInitb334676db889a370ee948b060f56f71b::$classMap;
 
         }, null, ClassLoader::class);

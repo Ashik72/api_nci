@@ -13,11 +13,15 @@ class DB
 
   public static function Connect() {
 
+    $conn = NULL;
 
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-    if ($conn->connect_error)
+    if ($conn->connect_error) {
+        die();
       return;
+    }
+
 
     return $conn;
 
