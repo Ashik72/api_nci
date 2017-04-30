@@ -83,7 +83,7 @@ class ImportHotelsTranslations extends ImportHotels
        	$attraction_information = str_replace("'","&apos;",$attraction_information);
 
          $sql = "INSERT INTO hotels VALUES('$code', '$master', '$destination', '$zipcode', '$latitude', '$longitude', '$countrycode', '$hotel_type', '$stars', '$hotel_availability_score', '$nr_rooms', '$nr_restaurants', '$nr_bars', '$nr_halls', '$year_built','$checkin_from','$checkout_to','','$updated_at')";
-        // $result = $db->query($sql);
+         //$result = $db->query($sql);
          $db->close();
          d($result);
          return;
