@@ -157,38 +157,40 @@ class ImportHotels
       if (static::keyExists($temp_data->code))
         $temp_data->code = ( (int) static::getLastIndex() ) + 1;
         $db = DB::Connect();
-        $code = $db->real_escape_string($temp_data->code);
-        $master = $db->real_escape_string($temp_data->master);
-        $name = $db->real_escape_string($temp_data->name);
-        $country = $db->real_escape_string($temp_data->country);
-        $zipcode = $db->real_escape_string($temp_data->zipcode);
-        $regions = $db->real_escape_string($temp_data->regions[0]);
-        $address = $db->real_escape_string($temp_data->address);
-        $destination = $db->real_escape_string($temp_data->destination);
-        $latitude = $db->real_escape_string($temp_data->latitude);
-        $longitude = $db->real_escape_string($temp_data->longitude);
-        $countrycode = $db->real_escape_string($temp_data->currencycode);
-        $checkin_from = $db->real_escape_string($temp_data->checkin_from);
-        $checkout_to = $db->real_escape_string($temp_data->checkout_to);
-        $nr_rooms = $db->real_escape_string($temp_data->nr_rooms);
-        $stars = $db->real_escape_string($temp_data->stars);
-        $hotel_type = $db->real_escape_string($temp_data->hotel_type);
+//        $code = ( empty($db->real_escape_string($temp_data->code)) ? "" : $db->real_escape_string($temp_data->code );
 
-        $hotel_information = $db->real_escape_string($temp_data->descriptions['hotel_information']);
-        $hotel_amenity = $db->real_escape_string($temp_data->descriptions['hotel_amenity']);
-        $room_amenity = $db->real_escape_string($temp_data->descriptions['room_amenity']);
-        $location_information = $db->real_escape_string($temp_data->descriptions['location_information']);
+        $code = ( empty( $db->real_escape_string($temp_data->code) ) ? "" : $db->real_escape_string($temp_data->code) );
+        $master = ( empty( $db->real_escape_string($temp_data->master) ) ? "" : $db->real_escape_string($temp_data->master) );
+        $name = ( empty( $db->real_escape_string($temp_data->name) ) ? "" : $db->real_escape_string($temp_data->name) );
+        $country = ( empty( $db->real_escape_string($temp_data->country) ) ? "" : $db->real_escape_string($temp_data->country) );
+        $zipcode = ( empty( $db->real_escape_string($temp_data->zipcode) ) ? "" : $db->real_escape_string($temp_data->zipcode) );
+        $regions = ( empty( $db->real_escape_string($temp_data->regions[0]) ) ? "" : $db->real_escape_string($temp_data->regions[0]) );
+        $address = ( empty( $db->real_escape_string($temp_data->address) ) ? "" : $db->real_escape_string($temp_data->address) );
+        $destination = ( empty( $db->real_escape_string($temp_data->destination) ) ? "" : $db->real_escape_string($temp_data->destination) );
+        $latitude = ( empty( $db->real_escape_string($temp_data->latitude) ) ? "" : $db->real_escape_string($temp_data->latitude) );
+        $longitude = ( empty( $db->real_escape_string($temp_data->longitude) ) ? "" : $db->real_escape_string($temp_data->longitude) );
+        $countrycode = ( empty( $db->real_escape_string($temp_data->currencycode) ) ? "" : $db->real_escape_string($temp_data->currencycode) );
+        $checkin_from = ( empty( $db->real_escape_string($temp_data->checkin_from) ) ? "" : $db->real_escape_string($temp_data->checkin_from) );
+        $checkout_to = ( empty( $db->real_escape_string($temp_data->checkout_to) ) ? "" : $db->real_escape_string($temp_data->checkout_to) );
+        $nr_rooms = ( empty( $db->real_escape_string($temp_data->nr_rooms) ) ? "" : $db->real_escape_string($temp_data->nr_rooms) );
+        $stars = ( empty( $db->real_escape_string($temp_data->stars) ) ? "" : $db->real_escape_string($temp_data->stars) );
+        $hotel_type = ( empty( $db->real_escape_string($temp_data->hotel_type) ) ? "" : $db->real_escape_string($temp_data->hotel_type) );
+
+        $hotel_information = ( empty( $db->real_escape_string($temp_data->descriptions['hotel_information']) ) ? "" : $db->real_escape_string($temp_data->descriptions['hotel_information']) );
+        $hotel_amenity = ( empty( $db->real_escape_string($temp_data->descriptions['hotel_amenity']) ) ? "" : $db->real_escape_string($temp_data->descriptions['hotel_amenity']) );
+        $room_amenity = ( empty( $db->real_escape_string($temp_data->descriptions['room_amenity']) ) ? "" : $db->real_escape_string($temp_data->descriptions['room_amenity']) );
+        $location_information = ( empty( $db->real_escape_string($temp_data->descriptions['location_information']) ) ? "" : $db->real_escape_string($temp_data->descriptions['location_information']) );
         $hotel_introduction = ( empty($temp_data->descriptions['hotel_introduction']) ? "none" : $db->real_escape_string($temp_data->descriptions['hotel_introduction']) );
 
         $hotel_availability_score = ( empty($temp_data->availability_score) ? 0 : $db->real_escape_string($temp_data->availability_score) );
 
-        $attraction_information = $db->real_escape_string($temp_data->descriptions['attraction_information']);
+        $attraction_information = ( empty( $db->real_escape_string($temp_data->descriptions['attraction_information']) ) ? "" : $db->real_escape_string($temp_data->descriptions['attraction_information']) );
 
-        $year_built = $db->real_escape_string($temp_data->year_built);
-        $nr_restaurants = $db->real_escape_string($temp_data->nr_restaurants);
-        $nr_bars = $db->real_escape_string($temp_data->nr_bars);
-        $nr_halls = $db->real_escape_string($temp_data->nr_halls);
-        $updated_at = $db->real_escape_string($temp_data->updated_at);
+        $year_built = ( empty( $db->real_escape_string($temp_data->year_built) ) ? "" : $db->real_escape_string($temp_data->year_built) );
+        $nr_restaurants = ( empty( $db->real_escape_string($temp_data->nr_restaurants) ) ? "" : $db->real_escape_string($temp_data->nr_restaurants) );
+        $nr_bars = ( empty( $db->real_escape_string($temp_data->nr_bars) ) ? "" : $db->real_escape_string($temp_data->nr_bars) );
+        $nr_halls = ( empty( $db->real_escape_string($temp_data->nr_halls) ) ? "" : $db->real_escape_string($temp_data->nr_halls) );
+        $updated_at = ( empty( $db->real_escape_string($temp_data->updated_at) ) ? "" : $db->real_escape_string($temp_data->updated_at) );
 
         $hotel_information = str_replace("'","&apos;",$hotel_information);
       	$hotel_amenity = str_replace("'","&apos;",$hotel_amenity);
@@ -200,6 +202,7 @@ class ImportHotels
         $sql = "INSERT INTO hotels VALUES('$code', '$master', '$name', '$country', '$destination', '$zipcode', '$address', '$latitude', '$longitude', '$countrycode', '$hotel_type', '$stars', '$hotel_availability_score', '$nr_rooms', '$nr_restaurants', '$nr_bars', '$nr_halls', '$year_built', '$checkin_from','$checkout_to','','$hotel_information', '$hotel_introduction', '$location_information', '$attraction_information', '$hotel_amenity', '$room_amenity','$updated_at')";
 
         $result = $db->query($sql);
+        $error = ( empty($db->error) ? "" : $db->error );
         $db->close();
 
         $passed = 0;
@@ -212,7 +215,8 @@ class ImportHotels
 
         d([
           'sql' => $sql,
-          'result' => $result
+          'result' => $result,
+          'error' => $error
         ]);
 
         return ['passed' => $passed, 'failed' => $failed];
